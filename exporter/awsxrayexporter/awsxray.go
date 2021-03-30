@@ -16,6 +16,7 @@ package awsxrayexporter
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/xray"
@@ -90,7 +91,11 @@ func newTraceExporter(
 			return err
 		},
 		exporterhelper.WithShutdown(func(context.Context) error {
-			return logger.Sync()
+			err := logger.Sync()
+			if err != nil {
+				fmt.Print(err)
+			}
+			return nil
 		}),
 	)
 }
